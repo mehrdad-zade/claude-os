@@ -71,7 +71,8 @@
             "YOUR_THIRD_PARTY_SERVICE_1",
             "YOUR_THIRD_PARTY_SERVICE_2"
         ],
-        "deployment_strategy": "YOUR_IAC_TOOL"
+        "deployment_strategy": "YOUR_IAC_TOOL",
+        "iac_directory": "./infra"
     },
 
     "agentic_capabilities": {
@@ -112,6 +113,12 @@
             }
         ],
         "rules_enforcement": "strict"
+    },
+
+    "sprint_tracking": {
+        "current_sprint": 1,
+        "sprint_directory": "Documents/Sprints",
+        "auto_log": true
     },
 
     "behavioral_settings": {

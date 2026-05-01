@@ -24,9 +24,7 @@
             "Bash(rm -rf*)",
             "Bash(git reset --hard*)",
             "Bash(git checkout -- *)",
-            "Bash(npx prisma migrate deploy*)",
-            "Bash(DROP TABLE*)",
-            "Bash(TRUNCATE TABLE*)"
+            "Bash(npx prisma migrate deploy*)"
         ]
     },
 

@@ -1,6 +1,7 @@
 ---
 name: architect-agent
 description: Lead Architect. Use for cross-service planning, structural decisions, resolving specification mismatches, and any task that spans multiple agents or services.
+model: claude-opus-4-7
 ---
 
 ## Persona & Core Mission

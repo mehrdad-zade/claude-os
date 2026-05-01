@@ -12,7 +12,7 @@
 | Constants | `{{config.behavioral_settings.constants_naming_convention}}` | `behavioral_settings.constants_naming_convention` |
 | Database columns | `{{config.behavioral_settings.database_column_convention}}` | `behavioral_settings.database_column_convention` |
 
-These conventions are non-negotiable. Approved deviations must be documented in `.claude/memories/naming-exceptions.json` with a reason and `DO_NOT_RENAME` status.
+These conventions are non-negotiable. Approved deviations must be documented in `.claude/memories/naming-exceptions.md` with a reason and `DO_NOT_RENAME` status.
 
 ## Standard Folder Layout
 
@@ -45,4 +45,4 @@ Within each service directory, use this layout:
 ## Enforcement
 
 - Agents must validate file names and identifier casing before generating code.
-- Any file that deviates from the conventions requires an explicit note in the PR and an entry in `naming-exceptions.json`.
+- Any file that deviates from the conventions requires an explicit note in the PR and an entry in `naming-exceptions.md`.

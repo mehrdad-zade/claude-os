@@ -16,4 +16,4 @@ Execute schema migrations for the SQL database layer.
    - Other → ask the user for the correct command
 4. After migration completes, verify the schema is in parity with the ORM model definitions.
 5. If any migration step fails, do not attempt a manual rollback without first showing the user the error and the available rollback options.
-6. Update `.claude/memories/dependency-graph.json` with the new schema version.
+6. Update `.claude/memories/dependency-graph.md` with the new schema version.

@@ -37,6 +37,7 @@ Resolved at session start from `config.project_identity`:
 @.claude/rules/security-and-logging.md
 @.claude/rules/documentation-sync.md
 @.claude/rules/structure-and-naming.md
+@.claude/rules/sprint-logging.md
 
 ---
 
@@ -68,15 +69,20 @@ Escalation chain: specialist → `architect-agent` → user.
 
 ---
 
-## Model Tiers (Advisory)
+## Model Tiers
 
-The model is fixed at session start — these tiers describe task **complexity**, not runtime model switching.
+Tiers are resolved from `config.llm_orchestration.tiers` and applied in two ways:
 
-| Tier | Model | Intent |
-|------|-------|--------|
-| `high` | `config.llm_orchestration.tiers.high.model` | Architecture, security-critical code, complex migrations |
-| `medium` | `config.llm_orchestration.tiers.medium.model` | Feature implementation, testing, integration work |
-| `low` | `config.llm_orchestration.tiers.low.model` | Boilerplate, linting, docs, simple scripts |
+1. **Agent frontmatter** — each agent file in `.claude/agents/` has a `model:` field hardcoded to the model that matches its `default_model_tier` in `config.json`. Claude Code reads this field when routing automatically.
+2. **Explicit Agent tool calls** — when spawning a sub-agent manually, pass the model matching the agent's tier.
+
+> When you change model names in `config.json`, update the corresponding agent frontmatter `model:` fields to keep them in sync. That is the only cross-file coupling in this setup.
+
+| Tier | Model | Agent(s) | Intent |
+|------|-------|----------|--------|
+| `high` | `{{config.llm_orchestration.tiers.high.model}}` | architect-agent, security-auditor | Architecture, security-critical code, complex migrations |
+| `medium` | `{{config.llm_orchestration.tiers.medium.model}}` | backend-specialist, frontend-expert, db-architect, devops-specialist | Feature implementation, testing, integration work |
+| `low` | `{{config.llm_orchestration.tiers.low.model}}` | _(no dedicated agent — use directly for boilerplate tasks)_ | Boilerplate, linting, docs, simple scripts |
 
 ---
 
@@ -117,7 +123,7 @@ Defined in `.claude/settings.json`, executed by Claude Code automatically:
 | `session-context.sh` | Every prompt | Injects project/env/branch/dirty-file count into context |
 | `pre-bash-guard.sh` | Before every Bash call | Blocks dangerous command patterns (non-zero exit) |
 | `post-edit-sync.sh` | After every Edit/Write | Injects doc-sync reminder for structural file changes |
-| `session-end.sh` | When Claude stops | Prompts memory persistence for session changes |
+| `session-end.sh` | When Claude stops | Reserved exit-0 placeholder; sprint logging and memory persistence enforced via loaded CLAUDE.md rules |
 
 ---
 

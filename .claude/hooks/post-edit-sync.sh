@@ -17,7 +17,7 @@ if echo "$FILE" | grep -qiE "(Architecture|Requirements|ReadMe|README|sprint|CLA
 
 # Emit reminder only for source, config, and infrastructure files
 if echo "$FILE" | grep -qE "\.(go|py|ts|tsx|js|jsx|rs|java|kt|rb|php|cs|sql|prisma|tf|tfvars|yaml|yml|json|toml|mod|sum|lock|dockerfile|sh)$"; then
-    printf '{"hookSpecificOutput":{"hookEventName":"PostToolUse","additionalContext":"[doc-sync] %s modified. If this is a structural change (new service, schema, API contract, infra resource, dependency), update the relevant file: Documents/Architecture.md | Documents/Requirements.md | Documents/Sprints/ | ReadMe.md"}}\n' "$FILE"
+    echo "[doc-sync] $FILE modified. If this is a structural change (new service, schema, API contract, infra resource, dependency), update the relevant file: Documents/Architecture.md | Documents/Requirements.md | Documents/Sprints/ | ReadMe.md"
 fi
 
 exit 0

@@ -4,7 +4,7 @@ Generate an infrastructure execution plan for review before any changes are appl
    - `config.infrastructure.cloud_provider`
    - `config.infrastructure.deployment_strategy`
    - `config.project_identity.environment`
-2. Navigate to the IaC directory (typically `./infra` or `./terraform`).
+2. Navigate to the IaC directory: `config.infrastructure.iac_directory` (default `./infra`).
 3. Run the appropriate plan command:
    - Terraform → `terraform init -input=false && terraform plan -out=tfplan`
    - Pulumi → `pulumi preview`
