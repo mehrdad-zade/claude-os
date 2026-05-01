@@ -12,7 +12,7 @@ At the start of **every session**, before any other action:
 
 1. **Read config** — Load `.claude/config.json` in its entirety.
 2. **Resolve tokens** — All `{{config.path.to.value}}` tokens throughout agents, rules, and commands are resolved using the loaded config. Substitute them mentally for the duration of the session.
-3. **Read memory** — Scan `.claude/memories/` for context continuity from prior sessions.
+3. **Memory is loaded below** — The three `@imports` in the Memory State section are already included in this context. Review them for continuity from prior sessions.
 4. **Confirm state** — In one sentence, confirm the active project name, environment, and primary stack before proceeding.
 
 ---
@@ -40,10 +40,20 @@ Resolved at session start from `config.project_identity`:
 
 ---
 
+## Memory State
+
+Loaded automatically below. Update the relevant file before ending any session that includes a structural change.
+
+@.claude/memories/dependency-graph.md
+@.claude/memories/infrastructure-state.md
+@.claude/memories/naming-exceptions.md
+
+---
+
 ## Agent Roster
 
 All agents live in `.claude/agents/`. Each agent resolves its own stack context from `config.json`.
-The escalation chain is: specialist agent → `architect-agent` → user.
+Escalation chain: specialist → `architect-agent` → user.
 
 | Agent ID | Default Tier | Responsibility |
 |----------|-------------|----------------|
@@ -54,13 +64,13 @@ The escalation chain is: specialist agent → `architect-agent` → user.
 | `devops-specialist` | medium | IaC, CI/CD, container orchestration, cloud provisioning |
 | `security-auditor` | high | Vulnerability scanning, secrets audit, compliance enforcement |
 
-**Specification mismatch protocol**: If any agent receives a request requiring a language, service, or dependency not listed in `config.json`, it must halt, state a `SPECIFICATION MISMATCH` error with the conflicting detail, and route to `architect-agent`. The architect then seeks explicit user authorization before proceeding.
+**Specification mismatch protocol**: If any agent receives a request requiring a language, service, or dependency not listed in `config.json`, it must halt, state a `SPECIFICATION MISMATCH` error, and route to `architect-agent`. The architect then seeks explicit user authorization before proceeding.
 
 ---
 
 ## Model Tiers (Advisory)
 
-Resolved from `config.llm_orchestration.tiers`. The model is fixed at session start — these tiers describe the **complexity level** of a task, not runtime model switching. Use them to calibrate reasoning depth.
+The model is fixed at session start — these tiers describe task **complexity**, not runtime model switching.
 
 | Tier | Model | Intent |
 |------|-------|--------|
@@ -68,35 +78,20 @@ Resolved from `config.llm_orchestration.tiers`. The model is fixed at session st
 | `medium` | `config.llm_orchestration.tiers.medium.model` | Feature implementation, testing, integration work |
 | `low` | `config.llm_orchestration.tiers.low.model` | Boilerplate, linting, docs, simple scripts |
 
-Context caching is enabled on all tiers. Default tier: `config.llm_orchestration.default_tier`.
-
 ---
 
 ## Available Commands
 
-Defined as slash commands in `.claude/commands/`. Invoke by name during a session.
+Defined as slash commands in `.claude/commands/`. The skills directory has been replaced by this native Claude Code feature.
 
-| Command | Trigger | Description |
-|---------|---------|-------------|
-| `/universal-runner` | Local dev | Start all services via docker-compose |
-| `/test-suite` | Any change | Run all frontend and backend tests |
-| `/audit-sec` | Pre-PR | Static analysis and dependency vulnerability scan |
-| `/infra-plan` | Before deploy | Generate IaC execution plan for review |
-| `/deploy-app` | Post-approval | Apply infrastructure changes |
-| `/db-migrate` | Schema change | Execute schema migrations (non-production only) |
-
----
-
-## Memory State
-
-Persistent session memory lives in `.claude/memories/`. Read all three at session start.
-Update the relevant file before ending any session that includes a structural change.
-
-| File | Tracks |
-|------|--------|
-| `dependency-graph.json` | Service-to-service contracts and shared schema sync status |
-| `infrastructure-state.json` | Last known cloud service states and deployment timestamps |
-| `naming-exceptions.json` | Approved deviations from the global naming convention |
+| Command | When to use |
+|---------|-------------|
+| `/universal-runner` | Start all local services via docker-compose |
+| `/test-suite` | Run all frontend and backend tests |
+| `/audit-sec` | Static analysis and dependency vulnerability scan (pre-PR) |
+| `/infra-plan` | Generate IaC execution plan for review |
+| `/deploy-app` | Apply infrastructure changes (requires prior `/infra-plan` review) |
+| `/db-migrate` | Execute schema migrations (non-production only) |
 
 ---
 
@@ -106,10 +101,29 @@ Updated per the `documentation-sync` rule on every structural or logic change.
 
 | File | Purpose |
 |------|---------|
-| `Architecture.md` | System design, component diagrams, pivot log with timestamps |
-| `Requirements.md` | Functional and non-functional requirements, fulfillment status |
-| `Sprints/` | Sprint planning, task tracking, blockers |
+| `Documents/Architecture.md` | System design, component diagrams, pivot log with timestamps |
+| `Documents/Requirements.md` | Functional and non-functional requirements, fulfillment status |
+| `Documents/Sprints/` | Sprint planning, task tracking, blockers |
 | `ReadMe.md` | Setup instructions, dependencies, developer onboarding |
+
+---
+
+## Hooks (Automated)
+
+Defined in `.claude/settings.json`, executed by Claude Code automatically:
+
+| Hook | Trigger | What it does |
+|------|---------|--------------|
+| `session-context.sh` | Every prompt | Injects project/env/branch/dirty-file count into context |
+| `pre-bash-guard.sh` | Before every Bash call | Blocks dangerous command patterns (non-zero exit) |
+| `post-edit-sync.sh` | After every Edit/Write | Injects doc-sync reminder for structural file changes |
+| `session-end.sh` | When Claude stops | Prompts memory persistence for session changes |
+
+---
+
+## MCP Servers
+
+Configured in `mcpServers` block of `.claude/settings.json`. Currently empty — see `.claude/mcp-servers.example.json` for ready-to-use templates (GitHub, Postgres, Slack, AWS, Jira, Linear, Datadog).
 
 ---
 
@@ -124,4 +138,4 @@ Resolved from `config.behavioral_settings`:
 - **Indentation**: `{{config.behavioral_settings.indentation}}`
 - **Security checks enforced**: `{{config.behavioral_settings.security_checks_enabled}}`
 
-Any deviation from the configured stack (`config.stack_specification`) or infrastructure (`config.infrastructure`) requires explicit user authorization. Do not introduce new dependencies, languages, or cloud services without documented approval.
+Any deviation from the configured stack (`config.stack_specification`) or infrastructure (`config.infrastructure`) requires explicit user authorization.

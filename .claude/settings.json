@@ -1,0 +1,79 @@
+{
+    "__setup": {
+        "permissions_note": "The allow list covers universal read-only ops. Add your project-specific stack commands (npm test, go build, terraform plan, etc.) to match what is defined in config.json stack_specification.",
+        "hooks_note": "Hook scripts live in .claude/hooks/. They are already executable. To add more hooks, create a script in that directory and reference it here.",
+        "mcp_note": "Add MCP server configs to mcpServers below. See .claude/mcp-servers.example.json for ready-to-use templates. All secrets must come from shell environment variables — never hardcoded."
+    },
+
+    "permissions": {
+        "allow": [
+            "Bash(git status)",
+            "Bash(git diff*)",
+            "Bash(git log*)",
+            "Bash(ls*)",
+            "Bash(find . *)",
+            "Bash(grep *)",
+            "Bash(cat *)",
+            "Bash(echo *)"
+        ],
+        "deny": [
+            "Bash(terraform apply --auto-approve*)",
+            "Bash(terraform destroy*)",
+            "Bash(git push --force*)",
+            "Bash(git push -f *)",
+            "Bash(rm -rf*)",
+            "Bash(git reset --hard*)",
+            "Bash(git checkout -- *)",
+            "Bash(npx prisma migrate deploy*)",
+            "Bash(DROP TABLE*)",
+            "Bash(TRUNCATE TABLE*)"
+        ]
+    },
+
+    "hooks": {
+        "UserPromptSubmit": [
+            {
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "./.claude/hooks/session-context.sh"
+                    }
+                ]
+            }
+        ],
+        "PreToolUse": [
+            {
+                "matcher": "Bash",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "./.claude/hooks/pre-bash-guard.sh"
+                    }
+                ]
+            }
+        ],
+        "PostToolUse": [
+            {
+                "matcher": "Edit|Write",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "./.claude/hooks/post-edit-sync.sh"
+                    }
+                ]
+            }
+        ],
+        "Stop": [
+            {
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "./.claude/hooks/session-end.sh"
+                    }
+                ]
+            }
+        ]
+    },
+
+    "mcpServers": {}
+}

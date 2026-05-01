@@ -2,98 +2,83 @@
     "project_identity": {
         "name": "YOUR_PROJECT_NAME",
         "root_directory": "./",
-        "version": "1.0.0",
+        "version": "0.1.0",
         "environment": "development"
     },
+
     "llm_orchestration": {
         "tiers": {
             "high": {
-                "model": "claude-3-5-sonnet-latest",
+                "model": "claude-opus-4-7",
                 "context_caching": true,
                 "max_output_tokens": 8192,
-                "intent": "Architectural planning and complex logic refactoring"
+                "intent": "Architecture, security-critical code, and complex migrations"
             },
             "medium": {
-                "model": "claude-3-5-haiku-latest",
+                "model": "claude-sonnet-4-6",
                 "context_caching": true,
                 "max_output_tokens": 4096,
-                "intent": "Feature implementation and comprehensive unit testing"
+                "intent": "Feature implementation, integration work, and testing"
             },
             "low": {
-                "model": "claude-3-haiku-20240307",
-                "context_caching": false,
+                "model": "claude-haiku-4-5-20251001",
+                "context_caching": true,
                 "max_output_tokens": 1024,
-                "intent": "Metadata tagging, linting, and terminal command verification"
+                "intent": "Boilerplate, linting, documentation, and simple scripts"
             }
         },
         "default_tier": "medium",
         "global_governance": {
-            "stop_sequences": [
-                "\n\nHuman:",
-                "User:"
-            ],
             "temperature": 0.3
         }
     },
+
     "stack_specification": {
-        "backends": [
-            {
+        "backends": {
+            "primary": {
                 "id": "primary-api",
-                "language": "Go",
-                "framework": "Gin",
+                "language": "YOUR_LANGUAGE",
+                "framework": "YOUR_FRAMEWORK",
                 "directory": "./backend"
             },
-            {
+            "secondary": {
                 "id": "worker-service",
-                "language": "Python",
-                "framework": "FastAPI",
-                "directory": "./workers"
+                "language": "YOUR_LANGUAGE",
+                "framework": "YOUR_FRAMEWORK",
+                "directory": "./workers",
+                "enabled": false
             }
-        ],
+        },
         "frontend": {
-            "framework": "Next.js",
-            "styling": "Tailwind CSS",
+            "framework": "YOUR_FRONTEND_FRAMEWORK",
+            "styling": "YOUR_STYLING_LIBRARY",
             "directory": "./web"
         },
         "databases": {
-            "sql": "PostgreSQL",
-            "no_sql": "Redis",
-            "orm": "Prisma"
+            "sql": "YOUR_SQL_ENGINE",
+            "no_sql": "YOUR_NOSQL_ENGINE",
+            "orm": "YOUR_ORM_OR_QUERY_BUILDER"
         }
     },
+
     "infrastructure": {
-        "cloud_provider": "AWS",
+        "cloud_provider": "YOUR_CLOUD_PROVIDER",
         "core_services": [
-            "Lambda",
-            "S3",
-            "RDS",
-            "EC2"
+            "YOUR_CORE_SERVICE_1",
+            "YOUR_CORE_SERVICE_2"
         ],
         "third_party_services": [
-            "Stripe",
-            "SendGrid",
-            "Auth0"
+            "YOUR_THIRD_PARTY_SERVICE_1",
+            "YOUR_THIRD_PARTY_SERVICE_2"
         ],
-        "deployment_strategy": "Terraform"
+        "deployment_strategy": "YOUR_IAC_TOOL"
     },
+
     "agentic_capabilities": {
         "agents_path": "./.claude/agents",
-        "skills_path": "./.claude/skills",
-        "active_agents": [
-            "frontend-expert",
-            "devops-specialist",
-            "db-architect"
-        ],
-        "rules_enforcement": "strict"
-    },
-    "behavioral_settings": {
-        "indentation": "2-spaces",
-        "naming_convention": "camelCase",
-        "security_checks_enabled": true
-    },
-    "agentic_capabilities": {
-        "agents_path": "./.claude/agents",
-        "skills_path": "./.claude/skills",
+        "commands_path": "./.claude/commands",
+        "memories_path": "./.claude/memories",
+        "rules_path": "./.claude/rules",
         "active_agents": [
             {
                 "id": "architect-agent",
@@ -117,15 +102,25 @@
             },
             {
                 "id": "devops-specialist",
-                "default_model_tier": "low",
+                "default_model_tier": "medium",
                 "description": "Infrastructure scripts and deployment execution"
             },
             {
                 "id": "security-auditor",
                 "default_model_tier": "high",
-                "description": "Critical vulnerability scanning and compliance"
+                "description": "Critical vulnerability scanning and compliance enforcement"
             }
         ],
         "rules_enforcement": "strict"
+    },
+
+    "behavioral_settings": {
+        "indentation": "2-spaces",
+        "code_naming_convention": "camelCase",
+        "file_naming_convention": "kebab-case",
+        "component_naming_convention": "PascalCase",
+        "constants_naming_convention": "UPPER_SNAKE_CASE",
+        "database_column_convention": "snake_case",
+        "security_checks_enabled": true
     }
 }
