@@ -80,7 +80,7 @@ If an agent encounters a framework or service not in `config.json`, it will halt
 - Sprint files live in `Documents/Sprints/sprint-N.md`.
 - The **Task Board** section (In Progress / Completed / Blocked) is yours to manage.
 - The **Session Log** section is auto-written by Claude after every session that changes files.
-- To start a new sprint: create `sprint-N.md` from the existing template and increment `sprint_tracking.current_sprint` in `config.json`.
+- To start a new sprint: create `sprint-N.md` from the existing template and increment `sprint_tracking.current_sprint` in `config.json`. **Start a new Claude Code session after editing config.json** — the sprint path is injected once per session start.
 
 ---
 

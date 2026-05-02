@@ -13,11 +13,10 @@ Append one entry per response when your response included **any** of the followi
 
 ## Where to Log
 
-The active sprint file is:
+The active sprint file path is injected into every prompt by the `session-context.sh` hook as `sprint-log=<path>` in the `[ctx]` line. **Always use that value — never derive the path from `config.json` tokens or prior session memory.** The hook reads `config.json` on every prompt, so it is always current.
 
-```
-{{config.sprint_tracking.sprint_directory}}/sprint-{{config.sprint_tracking.current_sprint}}.md
-```
+Example context line: `[ctx] project=Foo | env=development | branch=main | dirty=2 | sprint-log=Documents/Sprints/sprint-2.md`
+→ log to `Documents/Sprints/sprint-2.md`.
 
 Read this file first. Then use **Edit** to replace the sentinel marker `<!-- end-of-sprint-log -->` with your entry followed by the sentinel again. This reliably appends without guessing at line numbers.
 

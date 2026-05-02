@@ -2,7 +2,7 @@
 
 **Mehrdad Alemzadeh**
 
-*Reference implementation: [github.com/GitHub/claudeOS](https://github.com/GitHub/claudeOS)*
+*Reference implementation: [github.com/GitHub/claudeOS](https://github.com/mehrdad-zade/claude-os/)*
 
 ---
 
